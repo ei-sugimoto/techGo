@@ -1,0 +1,17 @@
+{
+  "name": "golang",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "golang.go",
+        "windmilleng.vscode-go-autotest",
+        "RomanPeshkov.go-test-outline",
+        "766b.go-outliner",
+        "mvdan.gofumpt"
+      ]
+    }
+  }
+}

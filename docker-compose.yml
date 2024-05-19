@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql_container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+    volumes:
+      - db-data:/var/lib/mysql
+      - ./db/my.cnf:/etc/mysql/my.cnf
+    ports:
+      - "3306:3306"
+
+  app:
+    build: ./app
+    container_name: golang_container
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: myuser
+      DB_PASSWORD: mypassword
+      DB_NAME: mydatabase
+    depends_on:
+      - db
+    volumes:
+      - .:/workspace
+    ports:
+      - "8080:8080"
+    tty: true
+    restart: always
+
+volumes:
+  db-data:
