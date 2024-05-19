@@ -12,7 +12,7 @@ type (
 	GetUsersRequest struct{
 	}
 	GetUsersResponce struct{
-		Users []User `json:"users"`
+		Users []*User `json:"users"`
 	}
 )
 
