@@ -32,22 +32,18 @@ func (h *UserHandler) GetUserCharacters(ctx context.Context, req *model.GetUserC
 
 }
 
+func (h *UserHandler) CreateUser(ctx context.Context, req *model.UserCreateRequest)(*model.UserCreateResponse, *model.CutomError) {
+	res, err := h.userService.CreateUser(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+
+	return &model.UserCreateResponse{Token: res.Token}, nil
+}
+
+
 func (h *UserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
-	case http.MethodGet:{
-		req := &model.GetUserCharacterRequest{}
-		res, err := h.GetUserCharacters(r.Context(), req)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		jsonRes , err := json.Marshal(res)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-		w.Write(jsonRes)
-	}
 	case http.MethodPost:{
 		req := &model.UserCreateRequest{}
 		if err := json.NewDecoder(r.Body).Decode(req); err != nil {
@@ -58,7 +54,7 @@ func (h *UserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "name is required", http.StatusBadRequest)
 			return
 		}
-		res, err := h.userService.CreateUser(r.Context(), req)
+		res, err := h.CreateUser(r.Context(), req)
 		if err != nil {
 			http.Error(w, err.Message, err.Code)
 			return
