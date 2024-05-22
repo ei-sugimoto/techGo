@@ -32,44 +32,32 @@ func (h *UserHandler) GetUserCharacters(ctx context.Context, req *model.GetUserC
 
 }
 
-func (h *UserHandler) CreateUser(ctx context.Context, req *model.UserCreateRequest)(*model.UserCreateResponse, *model.CutomError) {
-	res, err := h.userService.CreateUser(ctx, req)
-	if err != nil {
-		return nil, err
-	}
-
-	return &model.UserCreateResponse{Token: res.Token}, nil
-}
-
-
-func (h *UserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	switch r.Method {
-	case http.MethodPost:{
-		req := &model.UserCreateRequest{}
-		if err := json.NewDecoder(r.Body).Decode(req); err != nil {
-			http.Error(w, err.Error(), http.StatusBadRequest)
-			return
-		}
-		if req.Name == "" {
-			http.Error(w, "name is required", http.StatusBadRequest)
-			return
-		}
-		res, err := h.CreateUser(r.Context(), req)
-		if err != nil {
-			http.Error(w, err.Message, err.Code)
-			return
-		}
-		jsonRes , _ := json.Marshal(res.Token)
-		if(jsonRes == nil){
-			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-			return
-		}
-		w.Write(jsonRes)
-		log.Println("User created")
-	}
-
-		
-	default:
+func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		log.Println("Method not allowed")
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
 	}
+	req := &model.UserCreateRequest{}
+	if err := json.NewDecoder(r.Body).Decode(req); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	if req.Name == ""{
+		log.Printf("name is Required code:%d\n", http.StatusBadRequest)
+		http.Error(w, "name is required", http.StatusBadRequest)
+		return
+	}
+	res, err := h.userService.CreateUser(r.Context(), req)
+	if err != nil {
+		http.Error(w, err.Message, err.Code)
+		return
+	}
+	jsonRes , _ := json.Marshal(res.Token)
+	if(jsonRes == nil){
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	w.Write(jsonRes)
+	log.Println("User created")
 }

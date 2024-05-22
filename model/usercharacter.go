@@ -19,5 +19,9 @@ type (
 	UserCreateResponse struct{
 		Token string `json:"token"`
 	}
+
+	UserGetResponse struct{
+		Name string `json:"name"`
+	}
 )
 

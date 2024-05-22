@@ -63,7 +63,7 @@ func(s *UserCharacter) CreateUser(ctx context.Context, req *model.UserCreateRequ
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	
+
 	tokenString, err := token.SignedString([]byte("secret"))
 	if err != nil {
 		log.Println(err.Error())
@@ -71,4 +71,17 @@ func(s *UserCharacter) CreateUser(ctx context.Context, req *model.UserCreateRequ
 	}
 
 	return &model.UserCreateResponse{Token: tokenString}, nil
+}
+
+func(s *UserCharacter) GetUserCharacter(ctx context.Context, name string, UserCharacterID string)(*model.UserGetResponse, *model.CutomError){
+	res, err := s.db.QueryContext(ctx, "SELECT * FROM user_character WHERE user_character_id = ?", name)
+	if err != nil {
+		return nil, &model.CutomError{Code: http.StatusNotFound, Message: "user not found"}
+	}
+	userCharacter := model.UserCharacter{}
+
+	if err := res.Scan(&userCharacter.UserCharacterID, &userCharacter.CharacterID, &userCharacter.Name); err != nil {
+		return nil, &model.CutomError{Code: http.StatusInternalServerError, Message: err.Error()}
+	}
+	return &model.UserGetResponse{Name: userCharacter.Name}, nil
 }
