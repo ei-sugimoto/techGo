@@ -10,7 +10,8 @@
         "windmilleng.vscode-go-autotest",
         "RomanPeshkov.go-test-outline",
         "766b.go-outliner",
-        "mvdan.gofumpt"
+        "mvdan.gofumpt",
+        "ms-mssql.mssql"
       ]
     }
   }
