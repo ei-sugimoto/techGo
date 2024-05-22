@@ -7,6 +7,7 @@ import (
 	"github.com/ei-sugimoto/techGO/handler"
 	"github.com/ei-sugimoto/techGO/handler/middleware"
 	"github.com/ei-sugimoto/techGO/service"
+	"github.com/rs/cors"
 )
 
 
@@ -23,5 +24,6 @@ func NewRouter(db *sql.DB) http.Handler {
 		panic("panic test")
 	})
 	RecoveryMux := middleware.Recovery(mux)
-	return RecoveryMux
+	handler := cors.Default().Handler(RecoveryMux)
+	return handler
 }
