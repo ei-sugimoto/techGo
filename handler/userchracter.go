@@ -21,21 +21,21 @@ func NewUserHandler(userService *service.UserService) *UserHandler {
 	}
 }
 
-func (h *UserHandler) GetUsers(ctx context.Context, req *model.GetUsersRequest)(*model.GetUsersResponce, error) {
-	users, err := h.userService.GetUsers(ctx)
+func (h *UserHandler) GetUserCharacters(ctx context.Context, req *model.GetUserCharacterRequest)(*model.GetUserCharacterResponce, error) {
+	res, err := h.userService.GetUserCharacters(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	return &model.GetUsersResponce{Users: users}, nil
+	return &model.GetUserCharacterResponce{UserCharacters: res}, nil
 
 }
 
 func (h *UserHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
-		req := &model.GetUsersRequest{}
-		res, err := h.GetUsers(r.Context(), req)
+		req := &model.GetUserCharacterRequest{}
+		res, err := h.GetUserCharacters(r.Context(), req)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
