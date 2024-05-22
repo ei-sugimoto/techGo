@@ -12,5 +12,12 @@ type (
 	GetUserCharacterResponce struct{
 		UserCharacters []*UserCharacter `json:"UserCharacter"`
 	}
+
+	UserCreateRequest struct{
+		Name string `json:"name"`
+	}
+	UserCreateResponse struct{
+		Token string `json:"token"`
+	}
 )
 
