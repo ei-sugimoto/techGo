@@ -8,18 +8,18 @@ import (
 )
 
 // A TODOService implements CRUD of TODO entities.
-type UserService struct {
+type UserCharacter struct {
 	db *sql.DB
 }
 
 // NewTODOService returns new TODOService.
-func NewUserService(db *sql.DB) *UserService {
-	return &UserService{
+func NewUserCharacter(db *sql.DB) *UserCharacter {
+	return &UserCharacter{
 		db: db,
 	}
 }
 
-func(s *UserService) GetUserCharacters(ctx context.Context) ([]*model.UserCharacter, error) {
+func(s *UserCharacter) GetUserCharacters(ctx context.Context) ([]*model.UserCharacter, error) {
 	rows, err := s.db.Query("SELECT * FROM user_character")
 	if err != nil {
 		return nil, err
