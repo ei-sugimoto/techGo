@@ -11,7 +11,7 @@ import (
 )
 
 type (
-	UserHandler struct{
+	UserHandler struct {
 		userService *service.UserCharacter
 	}
 )
@@ -22,7 +22,7 @@ func NewUserHandler(userService *service.UserCharacter) *UserHandler {
 	}
 }
 
-func (h *UserHandler) GetUserCharacters(ctx context.Context, req *model.GetUserCharacterRequest)(*model.GetUserCharacterResponce, error) {
+func (h *UserHandler) GetUserCharacters(ctx context.Context, req *model.GetUserCharacterRequest) (*model.GetUserCharacterResponce, error) {
 	res, err := h.userService.GetUserCharacters(ctx)
 	if err != nil {
 		return nil, err
@@ -43,7 +43,7 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	if req.Name == ""{
+	if req.Name == "" {
 		log.Printf("name is Required code:%d\n", http.StatusBadRequest)
 		http.Error(w, "name is required", http.StatusBadRequest)
 		return
@@ -53,8 +53,8 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Message, err.Code)
 		return
 	}
-	jsonRes , _ := json.Marshal(res.Token)
-	if(jsonRes == nil){
+	jsonRes, _ := json.Marshal(res.Token)
+	if jsonRes == nil {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
