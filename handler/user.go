@@ -61,3 +61,32 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	w.Write(jsonRes)
 	log.Println("User created")
 }
+
+func (h *UserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		log.Println("Method not allowed")
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	token := r.Header.Get("x-token")
+
+	if token == "" {
+		log.Println("Token is required")
+		http.Error(w, "Token is required", http.StatusBadRequest)
+		return
+	}
+
+	res, err := h.userService.GetUser(r.Context(), token)
+	if err != nil {
+		http.Error(w, err.Message, err.Code)
+		return
+	}
+	jsonRes, _ := json.Marshal(res)
+	if jsonRes == nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	w.Write(jsonRes)
+	log.Println("User get")
+}
