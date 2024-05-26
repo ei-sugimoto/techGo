@@ -10,13 +10,11 @@ import (
 )
 
 type UserServiceMock struct {
-    mock.Mock
+	mock.Mock
 }
 
-
-
 func TestCreateUser_EmptyName(t *testing.T) {
-	res, err := service.NewUserCharacter(nil).CreateUser(nil, &model.UserCreateRequest{Name: ""})
+	res, err := service.NewUser(nil).CreateUser(nil, &model.UserCreateRequest{Name: ""})
 	if err == nil {
 		t.Errorf("expected error, but got nil")
 	}
@@ -28,7 +26,7 @@ func TestCreateUser_EmptyName(t *testing.T) {
 		t.Errorf("expected error message is 'name is required', but got %v", err.Error())
 	}
 
-	if err.Code != http.StatusBadRequest{
+	if err.Code != http.StatusBadRequest {
 		t.Errorf("expected error code is %v, but got %v", http.StatusBadRequest, err.Code)
 	}
 }

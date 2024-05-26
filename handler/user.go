@@ -12,23 +12,23 @@ import (
 
 type (
 	UserHandler struct {
-		userService *service.UserCharacter
+		userService *service.User
 	}
 )
 
-func NewUserHandler(userService *service.UserCharacter) *UserHandler {
+func NewUserHandler(userService *service.User) *UserHandler {
 	return &UserHandler{
 		userService: userService,
 	}
 }
 
-func (h *UserHandler) GetUserCharacters(ctx context.Context, req *model.GetUserCharacterRequest) (*model.GetUserCharacterResponce, error) {
-	res, err := h.userService.GetUserCharacters(ctx)
+func (h *UserHandler) GetUsers(ctx context.Context, req *model.GetUserRequest) (*model.GetUserResponce, error) {
+	res, err := h.userService.GetUsers(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	return &model.GetUserCharacterResponce{UserCharacters: res}, nil
+	return &model.GetUserResponce{Users: res}, nil
 
 }
 

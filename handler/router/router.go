@@ -10,10 +10,9 @@ import (
 	"github.com/rs/cors"
 )
 
-
 func NewRouter(db *sql.DB) http.Handler {
 	mux := http.NewServeMux()
-	userService := service.NewUserCharacter(db)
+	userService := service.NewUser(db)
 	userHandler := handler.NewUserHandler(userService)
 	mux.Handle("/user/create", http.HandlerFunc(userHandler.CreateUser))
 	mux.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {

@@ -12,42 +12,42 @@ import (
 )
 
 // A TODOService implements CRUD of TODO entities.
-type UserCharacter struct {
+type User struct {
 	db *sql.DB
 }
 
 // NewTODOService returns new TODOService.
-func NewUserCharacter(db *sql.DB) *UserCharacter {
-	return &UserCharacter{
+func NewUser(db *sql.DB) *User {
+	return &User{
 		db: db,
 	}
 }
 
-func(s *UserCharacter) GetUserCharacters(ctx context.Context) ([]*model.UserCharacter, error) {
+func (s *User) GetUsers(ctx context.Context) ([]*model.User, error) {
 	rows, err := s.db.Query("SELECT * FROM user_character")
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
-	var UserCharacters []*model.UserCharacter
+	var Users []*model.User
 	for rows.Next() {
-		var userCharacter model.UserCharacter
-		if err := rows.Scan(&userCharacter.UserCharacterID, &userCharacter.CharacterID, &userCharacter.Name); err != nil {
+		var User model.User
+		if err := rows.Scan(&User.UserID, &User.Name); err != nil {
 			return nil, err
 		}
-		UserCharacters = append(UserCharacters, &userCharacter)
+		Users = append(Users, &User)
 	}
 
-	return UserCharacters, nil
+	return Users, nil
 }
 
-func(s *UserCharacter) CreateUser(ctx context.Context, req *model.UserCreateRequest) (*model.UserCreateResponse, *model.CutomError) {
+func (s *User) CreateUser(ctx context.Context, req *model.UserCreateRequest) (*model.UserCreateResponse, *model.CutomError) {
 	name := req.Name
-	if name == ""{
+	if name == "" {
 		err := model.CutomError{Code: http.StatusBadRequest, Message: "name is required"}
 		log.Println(err.Message)
-		return nil, &err 
+		return nil, &err
 	}
 	uuid := uuid.New().String()
 
@@ -59,7 +59,7 @@ func(s *UserCharacter) CreateUser(ctx context.Context, req *model.UserCreateRequ
 
 	claims := jwt.MapClaims{
 		"user_character_id": uuid,
-		"name": name,
+		"name":              name,
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
@@ -69,19 +69,19 @@ func(s *UserCharacter) CreateUser(ctx context.Context, req *model.UserCreateRequ
 		log.Println(err.Error())
 		return nil, &model.CutomError{Code: http.StatusInternalServerError, Message: err.Error()}
 	}
-
+	log.Println("User Create tokenString: ", tokenString)
 	return &model.UserCreateResponse{Token: tokenString}, nil
 }
 
-func(s *UserCharacter) GetUserCharacter(ctx context.Context, name string, UserCharacterID string)(*model.UserGetResponse, *model.CutomError){
+func (s *User) GetUser(ctx context.Context, name string, UserID string) (*model.UserGetResponse, *model.CutomError) {
 	res, err := s.db.QueryContext(ctx, "SELECT * FROM user_character WHERE user_character_id = ?", name)
 	if err != nil {
 		return nil, &model.CutomError{Code: http.StatusNotFound, Message: "user not found"}
 	}
-	userCharacter := model.UserCharacter{}
+	User := model.User{}
 
-	if err := res.Scan(&userCharacter.UserCharacterID, &userCharacter.CharacterID, &userCharacter.Name); err != nil {
+	if err := res.Scan(&User.UserID, &User.UserID, &User.Name); err != nil {
 		return nil, &model.CutomError{Code: http.StatusInternalServerError, Message: err.Error()}
 	}
-	return &model.UserGetResponse{Name: userCharacter.Name}, nil
+	return &model.UserGetResponse{Name: User.Name}, nil
 }
