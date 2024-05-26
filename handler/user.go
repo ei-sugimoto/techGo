@@ -92,3 +92,42 @@ func (h *UserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
 	log.Println("complete get user")
 
 }
+
+func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPut {
+		log.Println("Method not allowed")
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+	req := &model.UserUpdateRequest{}
+	if err := json.NewDecoder(r.Body).Decode(req); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	if req.Name == "" {
+		log.Printf("name is Required code:%d\n", http.StatusBadRequest)
+		http.Error(w, "name is required", http.StatusBadRequest)
+		return
+	}
+
+	token := r.Header.Get("X-Token")
+
+	if token == "" {
+		log.Println("Token is required")
+		http.Error(w, "Token is required", http.StatusBadRequest)
+		return
+	}
+
+	res, err := h.userService.UpdateUser(r.Context(), req, token)
+	if err != nil {
+		http.Error(w, err.Message, err.Code)
+		return
+	}
+	jsonRes, _ := json.Marshal(res)
+	if jsonRes == nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+	w.Write(jsonRes)
+	log.Println("User updated")
+}

@@ -16,6 +16,7 @@ func NewRouter(db *sql.DB) http.Handler {
 	userHandler := handler.NewUserHandler(userService)
 	mux.Handle("/user/create", http.HandlerFunc(userHandler.CreateUser))
 	mux.Handle("/user/get", http.HandlerFunc(userHandler.GetUser))
+	mux.Handle("/user/update", http.HandlerFunc(userHandler.UpdateUser))
 	mux.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("pong"))
