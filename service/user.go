@@ -58,8 +58,7 @@ func (s *User) CreateUser(ctx context.Context, req *model.UserCreateRequest) (*m
 	}
 
 	claims := jwt.MapClaims{
-		"user_id": uuid,
-		"name":    name,
+		"name": name,
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
@@ -73,14 +72,21 @@ func (s *User) CreateUser(ctx context.Context, req *model.UserCreateRequest) (*m
 	return &model.UserCreateResponse{Token: tokenString}, nil
 }
 
-func (s *User) GetUser(ctx context.Context, name string, UserID string) (*model.UserGetResponse, *model.CutomError) {
-	res, err := s.db.QueryContext(ctx, "SELECT * FROM user_character WHERE user_character_id = ?", name)
+func (s *User) GetUser(ctx context.Context, token string) (*model.UserGetResponse, *model.CutomError) {
+	name, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
+		return []byte("secret"), nil
+	})
+	if err != nil {
+		log.Println(err.Error())
+		return nil, &model.CutomError{Code: http.StatusInternalServerError, Message: err.Error()}
+	}
+	res, err := s.db.QueryContext(ctx, "SELECT * FROM user WHERE user_id = ?", name)
 	if err != nil {
 		return nil, &model.CutomError{Code: http.StatusNotFound, Message: "user not found"}
 	}
 	User := model.User{}
 
-	if err := res.Scan(&User.UserID, &User.UserID, &User.Name); err != nil {
+	if err := res.Scan(&User.UserID, &User.Name); err != nil {
 		return nil, &model.CutomError{Code: http.StatusInternalServerError, Message: err.Error()}
 	}
 	return &model.UserGetResponse{Name: User.Name}, nil
