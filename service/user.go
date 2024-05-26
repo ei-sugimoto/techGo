@@ -51,15 +51,15 @@ func (s *User) CreateUser(ctx context.Context, req *model.UserCreateRequest) (*m
 	}
 	uuid := uuid.New().String()
 
-	_, err := s.db.ExecContext(ctx, "INSERT INTO user_character (user_character_id, name) VALUES (?, ?)", uuid, name)
+	_, err := s.db.ExecContext(ctx, "INSERT INTO user (user_id, name) VALUES (?, ?)", uuid, name)
 	if err != nil {
 		log.Println(err.Error())
 		return nil, &model.CutomError{Code: http.StatusInternalServerError, Message: err.Error()}
 	}
 
 	claims := jwt.MapClaims{
-		"user_character_id": uuid,
-		"name":              name,
+		"user_id": uuid,
+		"name":    name,
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
