@@ -109,3 +109,33 @@ func (s *User) GetUser(ctx context.Context, token string) (*model.UserGetRespons
 	log.Println("User Get Name: ", User.Name)
 	return &model.UserGetResponse{Name: User.Name}, nil
 }
+
+func (s *User) UpdateUser(ctx context.Context, req *model.UserUpdateRequest, token string) (*model.UserUpdateResponse, *model.CutomError) {
+	name := req.Name
+	if name == "" {
+		log.Println("name is Required code:", http.StatusBadRequest)
+		return nil, &model.CutomError{Code: http.StatusBadRequest, Message: "name is required"}
+	}
+
+	if token == "" {
+		log.Println("Token is required")
+		return nil, &model.CutomError{Code: http.StatusBadRequest, Message: "Token is required"}
+	}
+	log.Println("User Get token: ", token)
+
+	decodeToken, Error := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
+		return []byte("secret"), nil
+	})
+	if Error != nil {
+		log.Println(Error.Error())
+		return nil, &model.CutomError{Code: http.StatusInternalServerError, Message: Error.Error()}
+	}
+
+	nameFromToken := decodeToken.Claims.(jwt.MapClaims)["name"].(string)
+	_, err := s.db.ExecContext(ctx, "UPDATE user SET name = ? WHERE user_id = ?", name, nameFromToken)
+	if err != nil {
+		log.Println(err.Error())
+		return nil, &model.CutomError{Code: http.StatusInternalServerError, Message: err.Error()}
+	}
+	return &model.UserUpdateResponse{}, nil
+}

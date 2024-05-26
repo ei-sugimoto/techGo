@@ -22,4 +22,10 @@ type (
 	UserGetResponse struct {
 		Name string `json:"name"`
 	}
+
+	UserUpdateRequest struct {
+		Name string `json:"name"`
+	}
+
+	UserUpdateResponse struct{}
 )
