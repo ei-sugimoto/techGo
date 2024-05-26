@@ -28,6 +28,5 @@ type (
 	}
 
 	UserUpdateResponse struct {
-		Token string `json:"token"`
 	}
 )

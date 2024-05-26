@@ -58,7 +58,7 @@ func (s *User) CreateUser(ctx context.Context, req *model.UserCreateRequest) (*m
 	}
 
 	claims := jwt.MapClaims{
-		"name": name,
+		"user_id": uuid,
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
@@ -87,10 +87,10 @@ func (s *User) GetUser(ctx context.Context, token string) (*model.UserGetRespons
 		log.Println(err.Error())
 		return nil, &model.CutomError{Code: http.StatusInternalServerError, Message: err.Error()}
 	}
-	name := decodeToken.Claims.(jwt.MapClaims)["name"].(string)
-	log.Println("GET name FROM token: ", name)
+	UserId := decodeToken.Claims.(jwt.MapClaims)["user_id"].(string)
+	log.Println("GET user_id FROM token: ", UserId)
 
-	res, err := s.db.QueryContext(ctx, "SELECT * FROM user WHERE name = ?", name)
+	res, err := s.db.QueryContext(ctx, "SELECT * FROM user WHERE user_id = ?", UserId)
 	if err != nil {
 		log.Println(err.Error())
 		return nil, &model.CutomError{Code: http.StatusNotFound, Message: "user not found"}
@@ -132,24 +132,13 @@ func (s *User) UpdateUser(ctx context.Context, req *model.UserUpdateRequest, tok
 		return nil, &model.CutomError{Code: http.StatusInternalServerError, Message: Error.Error()}
 	}
 
-	nameFromToken := decodeToken.Claims.(jwt.MapClaims)["name"].(string)
-	log.Println("GET name FROM token: ", nameFromToken)
-	_, err := s.db.ExecContext(ctx, "UPDATE user SET name = ? WHERE name = ?", name, nameFromToken)
+	UserId := decodeToken.Claims.(jwt.MapClaims)["user_id"].(string)
+	log.Println("GET name FROM token: ", UserId)
+	_, err := s.db.ExecContext(ctx, "UPDATE user SET name = ? WHERE user_id = ?", name, UserId)
 	if err != nil {
 		log.Println(err.Error())
 		return nil, &model.CutomError{Code: http.StatusInternalServerError, Message: err.Error()}
 	}
 
-	claims := jwt.MapClaims{
-		"name": name,
-	}
-
-	newToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-
-	tokenString, err := newToken.SignedString([]byte("secret"))
-	if err != nil {
-		log.Println(err.Error())
-		return nil, &model.CutomError{Code: http.StatusInternalServerError, Message: err.Error()}
-	}
-	return &model.UserUpdateResponse{Token: tokenString}, nil
+	return &model.UserUpdateResponse{}, nil
 }
