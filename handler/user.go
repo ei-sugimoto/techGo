@@ -89,5 +89,6 @@ func (h *UserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Write(jsonRes)
-	log.Println("User get")
+	log.Println("complete get user")
+
 }
