@@ -133,7 +133,7 @@ func (s *User) UpdateUser(ctx context.Context, req *model.UserUpdateRequest, tok
 	}
 
 	UserId := decodeToken.Claims.(jwt.MapClaims)["user_id"].(string)
-	log.Println("GET name FROM token: ", UserId)
+	log.Println("GET user_id FROM token: ", UserId)
 	_, err := s.db.ExecContext(ctx, "UPDATE user SET name = ? WHERE user_id = ?", name, UserId)
 	if err != nil {
 		log.Println(err.Error())
