@@ -30,3 +30,16 @@ func TestCreateUser_EmptyName(t *testing.T) {
 		t.Errorf("expected error code is %v, but got %v", http.StatusBadRequest, err.Code)
 	}
 }
+
+func TestGetUser_Invalid_Token(t *testing.T) {
+	token := "invalid_token"
+	res, err := service.NewUser(nil).GetUser(nil, token)
+
+	if err == nil {
+		t.Errorf("expected error, but got nil")
+	}
+	if res != nil {
+		t.Errorf("expected nil, but got %v", res)
+	}
+
+}

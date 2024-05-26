@@ -15,6 +15,7 @@ func NewRouter(db *sql.DB) http.Handler {
 	userService := service.NewUser(db)
 	userHandler := handler.NewUserHandler(userService)
 	mux.Handle("/user/create", http.HandlerFunc(userHandler.CreateUser))
+	mux.Handle("/user/get", http.HandlerFunc(userHandler.GetUser))
 	mux.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("pong"))
@@ -23,6 +24,11 @@ func NewRouter(db *sql.DB) http.Handler {
 		panic("panic test")
 	})
 	RecoveryMux := middleware.Recovery(mux)
-	handler := cors.Default().Handler(RecoveryMux)
+	c := cors.New(cors.Options{
+		AllowedOrigins: []string{"*"},                            // すべてのオリジンからのリクエストを許可
+		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE"}, // 許可するメソッド
+		AllowedHeaders: []string{"*"},                            // すべてのヘッダーを許可
+	})
+	handler := c.Handler(RecoveryMux)
 	return handler
 }

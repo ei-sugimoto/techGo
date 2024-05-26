@@ -63,13 +63,14 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *UserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	if r.Method != http.MethodGet {
 		log.Println("Method not allowed")
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
-	token := r.Header.Get("x-token")
+	token := r.Header.Get("X-Token")
 
 	if token == "" {
 		log.Println("Token is required")
