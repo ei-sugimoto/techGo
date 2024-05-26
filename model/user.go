@@ -27,5 +27,7 @@ type (
 		Name string `json:"name"`
 	}
 
-	UserUpdateResponse struct{}
+	UserUpdateResponse struct {
+		Token string `json:"token"`
+	}
 )

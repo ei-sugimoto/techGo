@@ -116,7 +116,7 @@ func (s *User) UpdateUser(ctx context.Context, req *model.UserUpdateRequest, tok
 		log.Println("name is Required code:", http.StatusBadRequest)
 		return nil, &model.CutomError{Code: http.StatusBadRequest, Message: "name is required"}
 	}
-
+	log.Println("User Update name: ", name)
 	if token == "" {
 		log.Println("Token is required")
 		return nil, &model.CutomError{Code: http.StatusBadRequest, Message: "Token is required"}
@@ -126,16 +126,30 @@ func (s *User) UpdateUser(ctx context.Context, req *model.UserUpdateRequest, tok
 	decodeToken, Error := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
 		return []byte("secret"), nil
 	})
+
 	if Error != nil {
 		log.Println(Error.Error())
 		return nil, &model.CutomError{Code: http.StatusInternalServerError, Message: Error.Error()}
 	}
 
 	nameFromToken := decodeToken.Claims.(jwt.MapClaims)["name"].(string)
-	_, err := s.db.ExecContext(ctx, "UPDATE user SET name = ? WHERE user_id = ?", name, nameFromToken)
+	log.Println("GET name FROM token: ", nameFromToken)
+	_, err := s.db.ExecContext(ctx, "UPDATE user SET name = ? WHERE name = ?", name, nameFromToken)
 	if err != nil {
 		log.Println(err.Error())
 		return nil, &model.CutomError{Code: http.StatusInternalServerError, Message: err.Error()}
 	}
-	return &model.UserUpdateResponse{}, nil
+
+	claims := jwt.MapClaims{
+		"name": name,
+	}
+
+	newToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
+	tokenString, err := newToken.SignedString([]byte("secret"))
+	if err != nil {
+		log.Println(err.Error())
+		return nil, &model.CutomError{Code: http.StatusInternalServerError, Message: err.Error()}
+	}
+	return &model.UserUpdateResponse{Token: tokenString}, nil
 }
