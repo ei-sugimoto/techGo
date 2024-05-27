@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/ei-sugimoto/techGO/connect"
 	"github.com/ei-sugimoto/techGO/handler/router"
@@ -31,5 +33,23 @@ func main()  {
 	defer db.Close()
 	fmt.Println("DB接続成功")
 	mux := router.NewRouter(db)
-	http.ListenAndServe(":8080", mux)
+	srv := &http.Server{
+        Addr:    ":8080",
+        Handler: mux,
+    }
+	go func() {
+        if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+            log.Fatalf("listen: %s\n", err)
+        }
+    }()
+	log.Println("Server started on :8080")
+
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM)
+
+	<-stop
+
+	log.Println("Shutting down server...")
+
+	
 }
