@@ -10,6 +10,7 @@ import (
 	"github.com/rs/cors"
 )
 
+
 func NewRouter(db *sql.DB) http.Handler {
 	mux := http.NewServeMux()
 	userService := service.NewUser(db)
@@ -24,12 +25,17 @@ func NewRouter(db *sql.DB) http.Handler {
 	mux.HandleFunc("/panic", func(w http.ResponseWriter, r *http.Request) {
 		panic("panic test")
 	})
+
 	RecoveryMux := middleware.Recovery(mux)
 	c := cors.New(cors.Options{
-		AllowedOrigins: []string{"*"},                            // すべてのオリジンからのリクエストを許可
-		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE"}, // 許可するメソッド
-		AllowedHeaders: []string{"*"},                            // すべてのヘッダーを許可
+		AllowedOrigins: []string{"*"},                            
+		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE"}, 
+		AllowedHeaders: []string{"*"},
 	})
-	handler := c.Handler(RecoveryMux)
+
+	userAgentMux := middleware.NewUserAgent(RecoveryMux)
+	handler := c.Handler(userAgentMux)
+	
+	
 	return handler
 }
