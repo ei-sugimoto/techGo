@@ -29,13 +29,13 @@ func NewUserAgent(h http.Handler) http.Handler {
 		getLog.Info("UserAgent", slog.String("OS", ua.OS), slog.String("Browser", ua.Name), slog.String("Version", ua.Version))	
 		
 		if ua.Desktop {
-			getLog.Info("UserAgent is Desktop")			
+			getLog.Info("UserAgent", slog.String("OS", ua.OS), slog.String("Browser", ua.Name), slog.String("Version", ua.Version), slog.String("Device", "Desktop"))	
 		}
 		if ua.Mobile {
-			getLog.Info("UserAgent is Mobile")
+			getLog.Info("UserAgent", slog.String("OS", ua.OS), slog.String("Browser", ua.Name), slog.String("Version", ua.Version), slog.String("Device", "Mobile"))	
 		}
 		if ua.Tablet {
-			getLog.Info("UserAgent is Tablet")
+			getLog.Info("UserAgent", slog.String("OS", ua.OS), slog.String("Browser", ua.Name), slog.String("Version", ua.Version), slog.String("Device", "Tablet"))	
 		}
 		r = r.WithContext(context.WithValue(r.Context(), userAgentKey, ua.OS))
 		h.ServeHTTP(w, r)
