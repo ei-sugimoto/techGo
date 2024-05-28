@@ -2,9 +2,10 @@ package middleware
 
 import (
 	"context"
-	"log"
+	"log/slog"
 	"net/http"
 
+	"github.com/ei-sugimoto/techGO/logger"
 	"github.com/mileusna/useragent"
 )
 
@@ -24,17 +25,20 @@ func  GetUserAgent(r *http.Request) useragent.UserAgent {
 func NewUserAgent(h http.Handler) http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
 		ua := GetUserAgent(r)
-		log.Println("UserAgent OS:", ua.OS)
-		log.Println("UserAgent Browser:", ua.Name)
-		log.Println("UserAgent Version:", ua.Version)
+		getLog := logger.NewLogger().With(slog.String("path", "middleware/"))
+		getLog.Info("UserAgent OS:", slog.String("OS", ua.OS))
+		getLog.Info("UserAgent Browser:", slog.String("Browser", ua.Name))
+		getLog.Info("UserAgent Version:", slog.String("Version", ua.Version))
+	
+		
 		if ua.Desktop {
-			log.Println("UserAgent is Desktop")
+			getLog.Info("UserAgent is Desktop")			
 		}
 		if ua.Mobile {
-			log.Println("UserAgent is Mobile")
+			getLog.Info("UserAgent is Mobile")
 		}
 		if ua.Tablet {
-			log.Println("UserAgent is Tablet")
+			getLog.Info("UserAgent is Tablet")
 		}
 		r = r.WithContext(context.WithValue(r.Context(), userAgentKey, ua.OS))
 		h.ServeHTTP(w, r)

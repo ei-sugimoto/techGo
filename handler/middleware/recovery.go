@@ -1,16 +1,18 @@
 package middleware
 
 import (
-	"fmt"
+	"log/slog"
 	"net/http"
+
+	"github.com/ei-sugimoto/techGO/logger"
 )
 
 func Recovery(h http.Handler) http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
-		// TODO: ここに実装をする
+		newLogger := logger.NewLogger().With(slog.String("path", "middleware/"))
 		defer func() {
 			if r := recover(); r != nil {
-				fmt.Printf("get panic %v\n", r)
+				newLogger.Error("panic", slog.Any("panic", r))
 				http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 
 			}
