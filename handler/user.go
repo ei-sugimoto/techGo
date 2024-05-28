@@ -4,8 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"log"
+	"log/slog"
 	"net/http"
 
+	"github.com/ei-sugimoto/techGO/logger"
 	"github.com/ei-sugimoto/techGO/model"
 	"github.com/ei-sugimoto/techGO/service"
 )
@@ -32,6 +34,11 @@ func (h *UserHandler) GetUsers(ctx context.Context, req *model.GetUserRequest) (
 
 }
 
+func (h *UserHandler) GetLogger() *slog.Logger {
+	return logger.NewLogger().With(slog.String("path", "handler/"))
+}
+
+
 func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		log.Println("Method not allowed")
@@ -45,6 +52,7 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	}
 	if req.Name == "" {
 		log.Printf("name is Required code:%d\n", http.StatusBadRequest)
+		h.GetLogger().Error("name is required", slog.Int("code", http.StatusBadRequest))
 		http.Error(w, "name is required", http.StatusBadRequest)
 		return
 	}
