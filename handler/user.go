@@ -3,7 +3,6 @@ package handler
 import (
 	"context"
 	"encoding/json"
-	"log"
 	"log/slog"
 	"net/http"
 
@@ -41,7 +40,7 @@ func (h *UserHandler) GetLogger() *slog.Logger {
 
 func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
-		log.Println("Method not allowed")
+		h.GetLogger().Error("Method not allowed")
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
@@ -51,7 +50,6 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if req.Name == "" {
-		log.Printf("name is Required code:%d\n", http.StatusBadRequest)
 		h.GetLogger().Error("name is required", slog.Int("code", http.StatusBadRequest))
 		http.Error(w, "name is required", http.StatusBadRequest)
 		return
@@ -67,12 +65,12 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Write(jsonRes)
-	log.Println("User created")
+	h.GetLogger().Info("User created")
 }
 
 func (h *UserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
 if r.Method != http.MethodGet {
-		log.Println("Method not allowed")
+		h.GetLogger().Error("Method not allowed")
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
@@ -80,7 +78,7 @@ if r.Method != http.MethodGet {
 	token := r.Header.Get("X-Token")
 
 	if token == "" {
-		log.Println("Token is required")
+		h.GetLogger().Error("Token is required")
 		http.Error(w, "Token is required", http.StatusBadRequest)
 		return
 	}
@@ -96,13 +94,13 @@ if r.Method != http.MethodGet {
 		return
 	}
 	w.Write(jsonRes)
-	log.Println("complete get user")
+	h.GetLogger().Info("User Get")
 
 }
 
 func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPut {
-		log.Println("Method not allowed")
+	h.GetLogger().Error("Method not allowed")
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
@@ -112,7 +110,7 @@ func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if req.Name == "" {
-		log.Printf("name is Required code:%d\n", http.StatusBadRequest)
+		h.GetLogger().Error("name is required", slog.Int("code", http.StatusBadRequest))
 		http.Error(w, "name is required", http.StatusBadRequest)
 		return
 	}
@@ -120,7 +118,7 @@ func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	token := r.Header.Get("X-Token")
 
 	if token == "" {
-		log.Println("Token is required")
+		h.GetLogger().Error("Token is required")
 		http.Error(w, "Token is required", http.StatusBadRequest)
 		return
 	}
@@ -136,5 +134,5 @@ func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Write(jsonRes)
-	log.Println("User updated")
+	h.GetLogger().Info("User updated")
 }
