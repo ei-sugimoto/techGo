@@ -26,7 +26,6 @@ func NewUserAgent(h http.Handler) http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
 		ua := GetUserAgent(r)
 		getLog := logger.NewLogger().With(slog.String("path", "middleware/"))
-		getLog.Info("UserAgent", slog.String("OS", ua.OS), slog.String("Browser", ua.Name), slog.String("Version", ua.Version))	
 		
 		if ua.Desktop {
 			getLog.Info("UserAgent", slog.String("OS", ua.OS), slog.String("Browser", ua.Name), slog.String("Version", ua.Version), slog.String("Device", "Desktop"))	
