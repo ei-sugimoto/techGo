@@ -129,7 +129,7 @@ func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	jsonRes, _ := json.Marshal(res)
-	
+
 	w.Write(jsonRes)
 	h.GetLogger().Info("User updated")
 }

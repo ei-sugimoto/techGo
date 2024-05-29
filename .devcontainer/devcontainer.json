@@ -11,8 +11,13 @@
         "RomanPeshkov.go-test-outline",
         "766b.go-outliner",
         "mvdan.gofumpt",
-        "ms-mssql.mssql"
-      ]
+        "esbenp.prettier-vscode"
+      ],
+      "settings": {
+        "go.formatTool": "gofmt",
+        "go.useLanguageServer": true,
+        "editor.formatOnSave": true
+      }
     }
   }
 }
