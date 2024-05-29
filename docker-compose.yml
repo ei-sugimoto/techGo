@@ -16,7 +16,9 @@ services:
       - "3306:3306"
 
   app:
-    build: ./app
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: golang_container
     environment:
       DB_HOST: db
