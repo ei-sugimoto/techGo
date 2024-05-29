@@ -10,7 +10,6 @@ import (
 	"github.com/rs/cors"
 )
 
-
 func NewRouter(db *sql.DB) http.Handler {
 	mux := http.NewServeMux()
 	userService := service.NewUser(db)
@@ -28,14 +27,13 @@ func NewRouter(db *sql.DB) http.Handler {
 
 	RecoveryMux := middleware.Recovery(mux)
 	c := cors.New(cors.Options{
-		AllowedOrigins: []string{"*"},                            
-		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE"}, 
+		AllowedOrigins: []string{"*"},
+		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE"},
 		AllowedHeaders: []string{"*"},
 	})
 
 	userAgentMux := middleware.NewUserAgent(RecoveryMux)
 	handler := c.Handler(userAgentMux)
-	
-	
+
 	return handler
 }

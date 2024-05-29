@@ -10,9 +10,10 @@ import (
 )
 
 type key int
+
 const userAgentKey key = iota
 
-func  GetUserAgent(r *http.Request) useragent.UserAgent {
+func GetUserAgent(r *http.Request) useragent.UserAgent {
 	if r.Header.Get("User-Agent") == "" {
 		return useragent.UserAgent{}
 	}
@@ -21,20 +22,19 @@ func  GetUserAgent(r *http.Request) useragent.UserAgent {
 	return ua
 }
 
-
 func NewUserAgent(h http.Handler) http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
 		ua := GetUserAgent(r)
 		getLog := logger.NewLogger().With(slog.String("path", "middleware/"))
-		
+
 		if ua.Desktop {
-			getLog.Info("UserAgent", slog.String("OS", ua.OS), slog.String("Browser", ua.Name), slog.String("Version", ua.Version), slog.String("Device", "Desktop"))	
+			getLog.Info("UserAgent", slog.String("OS", ua.OS), slog.String("Browser", ua.Name), slog.String("Version", ua.Version), slog.String("Device", "Desktop"))
 		}
 		if ua.Mobile {
-			getLog.Info("UserAgent", slog.String("OS", ua.OS), slog.String("Browser", ua.Name), slog.String("Version", ua.Version), slog.String("Device", "Mobile"))	
+			getLog.Info("UserAgent", slog.String("OS", ua.OS), slog.String("Browser", ua.Name), slog.String("Version", ua.Version), slog.String("Device", "Mobile"))
 		}
 		if ua.Tablet {
-			getLog.Info("UserAgent", slog.String("OS", ua.OS), slog.String("Browser", ua.Name), slog.String("Version", ua.Version), slog.String("Device", "Tablet"))	
+			getLog.Info("UserAgent", slog.String("OS", ua.OS), slog.String("Browser", ua.Name), slog.String("Version", ua.Version), slog.String("Device", "Tablet"))
 		}
 		r = r.WithContext(context.WithValue(r.Context(), userAgentKey, ua.OS))
 		h.ServeHTTP(w, r)

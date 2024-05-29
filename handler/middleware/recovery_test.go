@@ -8,7 +8,6 @@ import (
 	"github.com/ei-sugimoto/techGO/handler/middleware"
 )
 
-
 func TestRecovery(t *testing.T) {
 	testW := httptest.NewRecorder()
 
@@ -24,8 +23,8 @@ func TestRecovery(t *testing.T) {
 	middleware.Recovery(testH).ServeHTTP(testW, testR)
 
 	if status := testW.Result().StatusCode; status != http.StatusInternalServerError {
-        t.Errorf("handler returned wrong status code: got %v want %v",
-            status, http.StatusInternalServerError)
-    }
-	
+		t.Errorf("handler returned wrong status code: got %v want %v",
+			status, http.StatusInternalServerError)
+	}
+
 }

@@ -37,7 +37,6 @@ func (h *UserHandler) GetLogger() *slog.Logger {
 	return logger.NewLogger().With(slog.String("path", "handler/"))
 }
 
-
 func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		h.GetLogger().Error("Method not allowed")
@@ -60,16 +59,16 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	jsonRes, _ := json.Marshal(res.Token)
-	if jsonRes == nil {
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return
-	}
+	// if jsonRes == nil {
+	// 	http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+	// 	return
+	// }
 	w.Write(jsonRes)
 	h.GetLogger().Info("User created")
 }
 
 func (h *UserHandler) GetUser(w http.ResponseWriter, r *http.Request) {
-if r.Method != http.MethodGet {
+	if r.Method != http.MethodGet {
 		h.GetLogger().Error("Method not allowed")
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
@@ -89,10 +88,11 @@ if r.Method != http.MethodGet {
 		return
 	}
 	jsonRes, _ := json.Marshal(res)
-	if jsonRes == nil {
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return
-	}
+	// if jsonRes == nil {
+	// 	http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+	// 	return
+	// }
+	w.Header().Set("Content-Type", "application/json")
 	w.Write(jsonRes)
 	h.GetLogger().Info("User Get")
 
@@ -100,7 +100,7 @@ if r.Method != http.MethodGet {
 
 func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPut {
-	h.GetLogger().Error("Method not allowed")
+		h.GetLogger().Error("Method not allowed")
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
@@ -129,10 +129,7 @@ func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	jsonRes, _ := json.Marshal(res)
-	if jsonRes == nil {
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-		return
-	}
+	
 	w.Write(jsonRes)
 	h.GetLogger().Info("User updated")
 }

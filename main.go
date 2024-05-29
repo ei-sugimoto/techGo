@@ -13,8 +13,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-
-func main()  {
+func main() {
 	const (
 		dbDriver = "mysql"
 	)
@@ -34,14 +33,14 @@ func main()  {
 	fmt.Println("DB接続成功")
 	mux := router.NewRouter(db)
 	srv := &http.Server{
-        Addr:    ":8080",
-        Handler: mux,
-    }
+		Addr:    ":8080",
+		Handler: mux,
+	}
 	go func() {
-        if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-            log.Fatalf("listen: %s\n", err)
-        }
-    }()
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatalf("listen: %s\n", err)
+		}
+	}()
 	log.Println("Server started on :8080")
 
 	stop := make(chan os.Signal, 1)
@@ -51,5 +50,4 @@ func main()  {
 
 	log.Println("Shutting down server...")
 
-	
 }

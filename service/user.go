@@ -12,11 +12,9 @@ import (
 	"github.com/google/uuid"
 )
 
-
 type User struct {
 	db *sql.DB
 }
-
 
 func NewUser(db *sql.DB) *User {
 	return &User{

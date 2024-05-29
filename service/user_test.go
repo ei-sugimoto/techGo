@@ -15,21 +15,21 @@ type UserServiceMock struct {
 }
 
 func TestCreateUser_EmptyName(t *testing.T) {
-    res, err := service.NewUser(nil).CreateUser(context.TODO(), &model.UserCreateRequest{Name: ""})
-    if err == nil {
-        t.Errorf("expected error, but got nil")
-    } else {
-        if err.Message != "name is required" {
-            t.Errorf("expected error message is 'name is required', but got %v", err.Error())
-        }
+	res, err := service.NewUser(nil).CreateUser(context.TODO(), &model.UserCreateRequest{Name: ""})
+	if err == nil {
+		t.Errorf("expected error, but got nil")
+	} else {
+		if err.Message != "name is required" {
+			t.Errorf("expected error message is 'name is required', but got %v", err.Error())
+		}
 
-        if err.Code != http.StatusBadRequest {
-            t.Errorf("expected error code is %v, but got %v", http.StatusBadRequest, err.Code)
-        }
-    }
-    if res != nil {
-        t.Errorf("expected nil, but got %v", res)
-    }
+		if err.Code != http.StatusBadRequest {
+			t.Errorf("expected error code is %v, but got %v", http.StatusBadRequest, err.Code)
+		}
+	}
+	if res != nil {
+		t.Errorf("expected nil, but got %v", res)
+	}
 }
 
 func TestGetUser_Invalid_Token(t *testing.T) {
