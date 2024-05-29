@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/ei-sugimoto/techGO/internal/pkg"
 	"github.com/ei-sugimoto/techGO/model"
 	"github.com/google/uuid"
 )
@@ -22,7 +23,7 @@ func NewUser(db *sql.DB) *User {
 }
 
 func (s *User) GetLogger() *slog.Logger {
-	return logger.NewLogger().With(slog.String("path", "service/"))
+	return pkg.NewLogger().With(slog.String("path", "service/"))
 }
 
 func (s *User) GetUsers(ctx context.Context) ([]*model.User, error) {
