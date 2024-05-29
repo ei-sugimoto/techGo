@@ -7,7 +7,6 @@ import (
 	"net/http"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/ei-sugimoto/techGO/logger"
 	"github.com/ei-sugimoto/techGO/model"
 	"github.com/google/uuid"
 )

@@ -5,7 +5,7 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/ei-sugimoto/techGO/logger"
+	"github.com/ei-sugimoto/techGO/pkg"
 	"github.com/mileusna/useragent"
 )
 
@@ -25,7 +25,7 @@ func GetUserAgent(r *http.Request) useragent.UserAgent {
 func NewUserAgent(h http.Handler) http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
 		ua := GetUserAgent(r)
-		getLog := logger.NewLogger().With(slog.String("path", "middleware/"))
+		getLog := pkg.NewLogger().With(slog.String("path", "middleware/"))
 
 		if ua.Desktop {
 			getLog.Info("UserAgent", slog.String("OS", ua.OS), slog.String("Browser", ua.Name), slog.String("Version", ua.Version), slog.String("Device", "Desktop"))

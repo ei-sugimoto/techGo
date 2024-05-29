@@ -4,12 +4,12 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/ei-sugimoto/techGO/logger"
+	"github.com/ei-sugimoto/techGO/pkg"
 )
 
 func Recovery(h http.Handler) http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
-		newLogger := logger.NewLogger().With(slog.String("path", "middleware/"))
+		newLogger := pkg.NewLogger().With(slog.String("path", "middleware/"))
 		defer func() {
 			if r := recover(); r != nil {
 				newLogger.Error("panic", slog.Any("panic", r))

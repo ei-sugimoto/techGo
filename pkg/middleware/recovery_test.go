@@ -4,6 +4,8 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/ei-sugimoto/techGO/pkg/middleware"
 )
 
 func TestRecovery(t *testing.T) {
