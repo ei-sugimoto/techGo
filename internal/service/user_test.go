@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/ei-sugimoto/techGO/internal/service"
 	"github.com/ei-sugimoto/techGO/model"
-	"github.com/ei-sugimoto/techGO/service"
 	"github.com/stretchr/testify/mock"
 )
 

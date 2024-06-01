@@ -6,9 +6,9 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/ei-sugimoto/techGO/logger"
+	"github.com/ei-sugimoto/techGO/internal/pkg"
+	"github.com/ei-sugimoto/techGO/internal/service"
 	"github.com/ei-sugimoto/techGO/model"
-	"github.com/ei-sugimoto/techGO/service"
 )
 
 type (
@@ -34,7 +34,7 @@ func (h *UserHandler) GetUsers(ctx context.Context, req *model.GetUserRequest) (
 }
 
 func (h *UserHandler) GetLogger() *slog.Logger {
-	return logger.NewLogger().With(slog.String("path", "handler/"))
+	return pkg.NewLogger().With(slog.String("path", "handler/"))
 }
 
 func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {

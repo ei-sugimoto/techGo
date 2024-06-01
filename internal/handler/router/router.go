@@ -4,9 +4,9 @@ import (
 	"database/sql"
 	"net/http"
 
-	"github.com/ei-sugimoto/techGO/handler"
-	"github.com/ei-sugimoto/techGO/handler/middleware"
-	"github.com/ei-sugimoto/techGO/service"
+	"github.com/ei-sugimoto/techGO/internal/handler"
+	"github.com/ei-sugimoto/techGO/internal/service"
+	"github.com/ei-sugimoto/techGO/pkg/middleware"
 	"github.com/rs/cors"
 )
 

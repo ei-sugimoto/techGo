@@ -9,7 +9,7 @@ import (
 	"syscall"
 
 	"github.com/ei-sugimoto/techGO/connect"
-	"github.com/ei-sugimoto/techGO/handler/router"
+	"github.com/ei-sugimoto/techGO/internal/handler/router"
 	_ "github.com/go-sql-driver/mysql"
 )
 
