@@ -5,7 +5,7 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/ei-sugimoto/techGO/internal/pkg"
+	"github.com/ei-sugimoto/techGO/pkg"
 	"github.com/mileusna/useragent"
 )
 

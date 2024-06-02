@@ -4,7 +4,7 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/ei-sugimoto/techGO/internal/pkg"
+	"github.com/ei-sugimoto/techGO/pkg"
 )
 
 func Recovery(h http.Handler) http.Handler {
