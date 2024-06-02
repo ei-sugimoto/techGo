@@ -4,20 +4,17 @@ import (
 	"context"
 
 	"github.com/ei-sugimoto/techGO/internal/domain/model"
+	"github.com/ei-sugimoto/techGO/internal/domain/repository"
 	"gorm.io/gorm"
 )
 
-type UserRepository interface {
-	CreateUser(ctx context.Context, user *model.User) error
-	GetUser(ctx context.Context, user *model.User) error
-	UpdateUser(ctx context.Context, user *model.User) error
-}
 
 type userRepository struct {
 	db *gorm.DB
 }
 
-func NewUserRepository(db *gorm.DB) UserRepository {
+
+func NewUserRepository(db *gorm.DB) repository.UserRepository {
 	return &userRepository{db: db}
 }
 

@@ -4,8 +4,8 @@ import (
 	"context"
 	"log/slog"
 
-	"github.com/ei-sugimoto/techGO/internal/adapter/repository"
 	"github.com/ei-sugimoto/techGO/internal/domain/model"
+	"github.com/ei-sugimoto/techGO/internal/domain/repository"
 	"github.com/ei-sugimoto/techGO/pkg"
 	"github.com/google/uuid"
 )
