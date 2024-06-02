@@ -8,11 +8,15 @@ import (
 	"github.com/ei-sugimoto/techGO/internal/domain/service"
 	"github.com/ei-sugimoto/techGO/internal/infrastructure/middleware"
 	"github.com/ei-sugimoto/techGO/internal/usecase"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func NewRouter() *gin.Engine {
 	r := gin.Default()
+	ginConfig := cors.DefaultConfig()
+	ginConfig.AllowAllOrigins = true
+	r.Use(cors.New(ginConfig))
 
 	config.InitDB()
 
