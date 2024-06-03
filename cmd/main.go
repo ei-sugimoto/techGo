@@ -5,7 +5,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/ei-sugimoto/techGO/internal/infrastructure/router"
+	"github.com/ei-sugimoto/techGO/internal/handler/router"
 	"github.com/ei-sugimoto/techGO/pkg"
 )
 

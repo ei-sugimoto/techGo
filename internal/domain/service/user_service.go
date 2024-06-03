@@ -11,11 +11,11 @@ import (
 )
 
 type UserService struct {
-	userRepository repository.UserRepository
+	userRepository repository.IUserRepository
 	logger         *slog.Logger
 }
 
-func NewUserService(userRepository repository.UserRepository) *UserService {
+func NewUserService(userRepository repository.IUserRepository) *UserService {
 	return &UserService{userRepository: userRepository, logger: pkg.NewLogger().With(slog.String("path", "service/user_service.go"))}
 }
 

@@ -5,22 +5,19 @@ import (
 
 	"github.com/ei-sugimoto/techGO/internal/domain/model"
 	"github.com/ei-sugimoto/techGO/internal/domain/repository"
-	"gorm.io/gorm"
+	"github.com/ei-sugimoto/techGO/internal/infrastructure/dao"
 )
 
-
 type userRepository struct {
-	db *gorm.DB
+	DB *dao.DataBase
 }
 
-
-func NewUserRepository(db *gorm.DB) repository.UserRepository {
-	return &userRepository{db: db}
+func NewUserRepository(db *dao.DataBase) repository.IUserRepository {
+	return &userRepository{DB: db}
 }
 
 func (r *userRepository) CreateUser(ctx context.Context, user *model.User) error {
-
-	return r.db.Create(user).Error
+	return r.DB.GormDB.Create(user).Error
 }
 
 func (r *userRepository) GetUser(ctx context.Context, user *model.User) error {
