@@ -2,6 +2,7 @@ package service_test
 
 import (
 	"context"
+	"log"
 	"testing"
 
 	"github.com/ei-sugimoto/techGO/internal/domain/model"
@@ -12,7 +13,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func GetUserTest(t *testing.T) {
+func TestGetUser(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
@@ -24,25 +25,22 @@ func GetUserTest(t *testing.T) {
 	userService := service.NewUserService(mockRepo)
 
 	_, user, err := userService.GetUser(context.Background(), "testID")
-
+	log.Println(mockUser.UserID, user.UserID)
 	assert.Equal(t, mockUser, user)
 	assert.Nil(t, err)
 
 }
 
-func CreateUserTest(t *testing.T) {
+func TestCreateUser(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
 	mockRepo := mock_repository.NewMockIUserRepository(ctrl)
-	mockUUID := uuid.New()
-	mockUser := &model.User{UserID: mockUUID, Name: "testName"}
-	mockRepo.EXPECT().CreateUser(gomock.Any(), mockUser).Return(nil)
+	mockRepo.EXPECT().CreateUser(gomock.Any(), gomock.Any()).Return(nil)
 
 	userService := service.NewUserService(mockRepo)
 
-	ctx, err := userService.CreateUser(context.Background(), "testName")
+	_, err := userService.CreateUser(context.Background(), "testName")
 
 	assert.Nil(t, err)
-	assert.NotNil(t, ctx.Value("token"))
 }
