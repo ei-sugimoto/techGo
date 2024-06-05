@@ -36,3 +36,12 @@ func (s *UserService) CreateUser(ctx context.Context, name string) (context.Cont
 	ctxWithToken := context.WithValue(context.Background(), "token", token)
 	return ctxWithToken, nil
 }
+
+func (s *UserService) GetUser(ctx context.Context, userId string) (context.Context, *model.User, error) {
+	user, err := s.userRepository.GetUser(ctx, userId)
+	if err != nil {
+		s.logger.Error(err.Error())
+		return ctx, nil, err
+	}
+	return ctx, user, nil
+}

@@ -16,6 +16,8 @@ func NewRouter() *gin.Engine {
 	r := gin.Default()
 	ginConfig := cors.DefaultConfig()
 	ginConfig.AllowAllOrigins = true
+	ginConfig.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"}
+	ginConfig.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type", "X-Token"}
 	r.Use(cors.New(ginConfig))
 
 	db := dao.DataBase{}
@@ -29,11 +31,19 @@ func NewRouter() *gin.Engine {
 	r.POST("/user/create", middleware.Recovery(), middleware.NewUserAgent(), func(c *gin.Context) {
 		userHandlerCreate(userHandler, c)
 	})
+	r.GET("/user/get", middleware.Recovery(), middleware.NewUserAgent(), func(c *gin.Context) {
+		userHandlerGet(userHandler, c)
+	})
 
 	return r
 }
 
 func userHandlerCreate(userHandler handler.IUserHandler, c *gin.Context) {
 	res := userHandler.CreateUser(c)
+	c.JSON(res.StatusCode, res)
+}
+
+func userHandlerGet(userHandler handler.IUserHandler, c *gin.Context) {
+	res := userHandler.GetUser(c)
 	c.JSON(res.StatusCode, res)
 }

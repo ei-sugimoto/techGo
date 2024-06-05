@@ -20,9 +20,12 @@ func (r *userRepository) CreateUser(ctx context.Context, user *model.User) error
 	return r.DB.GormDB.Create(user).Error
 }
 
-func (r *userRepository) GetUser(ctx context.Context, user *model.User) error {
-	// ここでユーザーの取得処理を実装します
-	return nil
+func (r *userRepository) GetUser(ctx context.Context, userId string) (*model.User, error) {
+	user := &model.User{}
+	if err := r.DB.GormDB.Where("user_id = ?", userId).First(user).Error; err != nil {
+		return nil, err
+	}
+	return user, nil
 }
 
 func (r *userRepository) UpdateUser(ctx context.Context, user *model.User) error {

@@ -1,5 +1,9 @@
 package input
 
-type UserInput struct {
+type CreateUserInput struct {
 	Name string
+}
+
+type GetUserInput struct {
+	UserID string
 }

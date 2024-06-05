@@ -5,10 +5,12 @@ import (
 
 	"github.com/ei-sugimoto/techGO/internal/domain/service"
 	input "github.com/ei-sugimoto/techGO/internal/usecase/Input"
+	"github.com/ei-sugimoto/techGO/internal/usecase/output"
 )
 
 type IUserUseCase interface {
-	CreateUser(ctx context.Context, i input.UserInput) (context.Context, error)
+	CreateUser(ctx context.Context, i input.CreateUserInput) (context.Context, error)
+	GetUser(ctx context.Context, i *input.GetUserInput) (context.Context, *output.GetUserOutput, error)
 }
 
 type userUseCase struct {
@@ -21,6 +23,17 @@ func NewUserUsecase(userService *service.UserService) IUserUseCase {
 	}
 }
 
-func (u *userUseCase) CreateUser(ctx context.Context, i input.UserInput) (context.Context, error) {
+func (u *userUseCase) CreateUser(ctx context.Context, i input.CreateUserInput) (context.Context, error) {
 	return u.userService.CreateUser(ctx, i.Name)
+}
+
+func (u *userUseCase) GetUser(ctx context.Context, i *input.GetUserInput) (context.Context, *output.GetUserOutput, error) {
+	ctx, user, err := u.userService.GetUser(ctx, i.UserID)
+	if err != nil {
+		return ctx, nil, err
+	}
+	return ctx, &output.GetUserOutput{
+		UserID: user.UserID.String(),
+		Name:   user.Name,
+	}, nil
 }
