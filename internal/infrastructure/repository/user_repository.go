@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"log"
 
 	"github.com/ei-sugimoto/techGO/internal/domain/model"
 	"github.com/ei-sugimoto/techGO/internal/domain/repository"
@@ -28,7 +29,7 @@ func (r *userRepository) GetUser(ctx context.Context, userId string) (*model.Use
 	return user, nil
 }
 
-func (r *userRepository) UpdateUser(ctx context.Context, user *model.User) error {
-	// ここでユーザーの更新処理を実装します
-	return nil
+func (r *userRepository) UpdateUser(ctx context.Context, userId string, name string) error {
+	log.Println(name, userId, "update")
+	return r.DB.GormDB.Model(&model.User{}).Where("user_id = ?", userId).Updates(model.User{Name: name}).Error
 }

@@ -7,3 +7,8 @@ type CreateUserInput struct {
 type GetUserInput struct {
 	UserID string
 }
+
+type UpdateUserInput struct {
+	UserID string
+	Name   string
+}

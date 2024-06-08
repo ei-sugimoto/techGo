@@ -2,7 +2,6 @@ package presenter
 
 import (
 	"context"
-	"net/http"
 
 	"github.com/ei-sugimoto/techGO/pkg"
 	"github.com/gin-gonic/gin"
@@ -15,8 +14,7 @@ func NewUserPresenter() *UserPresenter {
 }
 
 type UserCreateResponse struct {
-	Token      string `json:"token"`
-	StatusCode int    `json:"code"`
+	Token string `json:"token"`
 }
 
 type UserCreateRequest struct {
@@ -28,21 +26,21 @@ type UserGetRequest struct {
 }
 
 type UserGetResponse struct {
-	Name       string `json:"name"`
-	StatusCode int    `json:"code"`
+	Name string `json:"name"`
 }
 
-func (p *UserPresenter) CreateUserResponce(ctx context.Context, err error) *UserCreateResponse {
-	if err != nil {
-		return &UserCreateResponse{
-			Token:      "",
-			StatusCode: http.StatusBadRequest,
-		}
-	}
+type UserUpdateRequest struct {
+	UserID string `json:"user_id"`
+	Name   string `json:"name"`
+}
+
+type UserUpdateResponse struct {
+}
+
+func (p *UserPresenter) CreateUserResponce(ctx context.Context) *UserCreateResponse {
 	token := ctx.Value("token").(string)
 	return &UserCreateResponse{
-		Token:      token,
-		StatusCode: http.StatusOK,
+		Token: token,
 	}
 }
 
@@ -67,15 +65,31 @@ func (p *UserPresenter) GetUserRequest(ctx *gin.Context) (*UserGetRequest, error
 	return &req, nil
 }
 
-func (p *UserPresenter) GetUserResponce(ctx context.Context, err error, name string) *UserGetResponse {
-	if err != nil {
-		return &UserGetResponse{
-			Name:       "",
-			StatusCode: http.StatusBadRequest,
-		}
-	}
+func (p *UserPresenter) GetUserResponce(ctx context.Context, name string) *UserGetResponse {
+
 	return &UserGetResponse{
-		Name:       name,
-		StatusCode: http.StatusOK,
+		Name: name,
 	}
+}
+
+func (p *UserPresenter) UpdateUserRequest(ctx *gin.Context) (*UserUpdateRequest, error) {
+	type Request struct {
+		Name string `json:"name"`
+	}
+	var body Request
+	if err := ctx.BindJSON(&body); err != nil {
+		// エラーハンドリング
+		return nil, err
+	}
+
+	var req UserUpdateRequest
+	req.Name = body.Name
+	token := ctx.GetHeader("x-token")
+	userId, err := pkg.DecodeJwt(token, "user_id")
+	if err != nil {
+		return nil, err
+	}
+	req.UserID = userId
+
+	return &req, nil
 }

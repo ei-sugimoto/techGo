@@ -11,6 +11,7 @@ import (
 type IUserUseCase interface {
 	CreateUser(ctx context.Context, i input.CreateUserInput) (context.Context, error)
 	GetUser(ctx context.Context, i *input.GetUserInput) (context.Context, *output.GetUserOutput, error)
+	UpdateUser(ctx context.Context, i *input.UpdateUserInput) (context.Context, error)
 }
 
 type userUseCase struct {
@@ -36,4 +37,8 @@ func (u *userUseCase) GetUser(ctx context.Context, i *input.GetUserInput) (conte
 		UserID: user.UserID.String(),
 		Name:   user.Name,
 	}, nil
+}
+
+func (u *userUseCase) UpdateUser(ctx context.Context, i *input.UpdateUserInput) (context.Context, error) {
+	return u.userService.UpdateUser(ctx, i.UserID, i.Name)
 }

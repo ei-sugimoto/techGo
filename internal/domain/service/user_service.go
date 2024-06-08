@@ -45,3 +45,12 @@ func (s *UserService) GetUser(ctx context.Context, userId string) (context.Conte
 	}
 	return ctx, user, nil
 }
+
+func (s *UserService) UpdateUser(ctx context.Context, userId string, name string) (context.Context, error) {
+	err := s.userRepository.UpdateUser(ctx, userId, name)
+	if err != nil {
+		s.logger.Error(err.Error())
+		return ctx, err
+	}
+	return ctx, nil
+}
