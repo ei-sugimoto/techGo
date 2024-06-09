@@ -8,3 +8,7 @@ type UserCharacter struct {
 	UserCharacterID uuid.UUID `gorm:"type:uuid;primary_key;"`
 	User            User      `gorm:"foreignkey:UserID;association_foreignkey:UserID;association_autoupdate:false;association_autocreate:false;"`
 }
+
+func (uc *UserCharacter) TableName() string {
+	return "user_character"
+}
