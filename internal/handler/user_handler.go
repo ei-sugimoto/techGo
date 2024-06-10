@@ -1,8 +1,6 @@
 package handler
 
 import (
-	"context"
-
 	"github.com/ei-sugimoto/techGO/internal/handler/presenter"
 	"github.com/ei-sugimoto/techGO/internal/usecase"
 	input "github.com/ei-sugimoto/techGO/internal/usecase/Input"
@@ -32,8 +30,7 @@ func (h *userHandler) CreateUser(ctx *gin.Context) (*presenter.UserCreateRespons
 		return nil, err
 	}
 	input := input.CreateUserInput{Name: req.Name}
-	var encodeCtx context.Context
-	encodeCtx = ctx.Request.Context()
+	encodeCtx := ctx.Request.Context()
 	newCtx, err := h.userUseCase.CreateUser(encodeCtx, input)
 	if err != nil {
 		return nil, err

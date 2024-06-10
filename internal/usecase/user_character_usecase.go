@@ -9,7 +9,7 @@ import (
 )
 
 type IUserCharacterUseCase interface {
-	GetUserCharacter(ctx context.Context, i *input.GetUserCharacterInput) (context.Context, *output.GetUserCharacterOutputs, error)
+	GetUserCharacter(ctx context.Context, i *input.GetUserCharacterInput) (context.Context, output.GetUserCharacterOutputs, error)
 }
 
 type UserCharacterUseCase struct {
@@ -22,8 +22,8 @@ func NewUserCharacterUseCase(userCharacterSerivce *service.UserCharacterService)
 	}
 }
 
-func (u *UserCharacterUseCase) GetUserCharacter(ctx context.Context, i *input.GetUserCharacterInput) (context.Context, 
-	*output.GetUserCharacterOutputs, error) {
+func (u *UserCharacterUseCase) GetUserCharacter(ctx context.Context, i *input.GetUserCharacterInput) (context.Context,
+	output.GetUserCharacterOutputs, error) {
 	newctx, rows, err := u.userCharacterSerivce.GetUserCharacter(ctx, i.UserID)
 
 	if err != nil {
@@ -33,8 +33,9 @@ func (u *UserCharacterUseCase) GetUserCharacter(ctx context.Context, i *input.Ge
 	for _, row := range rows {
 		res = append(res, output.GetUserCharacterOutput{
 			UserCharacterID: row.UserCharacterID.String(),
-			UserID:          row.User.UserID.String(),
+			Name:            row.Name,
+			CharacterID:     row.Character.CharacterID.String(),
 		})
 	}
-	return newctx, &res, nil
+	return newctx, res, nil
 }

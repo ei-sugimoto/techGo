@@ -2,7 +2,8 @@ package output
 
 type GetUserCharacterOutput struct {
 	UserCharacterID string
-	UserID          string
+	CharacterID     string
+	Name            string
 }
 
 type GetUserCharacterOutputs []GetUserCharacterOutput

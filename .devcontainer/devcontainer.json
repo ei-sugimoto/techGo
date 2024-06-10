@@ -16,7 +16,11 @@
       "settings": {
         "go.formatTool": "gofmt",
         "go.useLanguageServer": true,
-        "editor.formatOnSave": true
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "golang.go",
+        "[json]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        }
       }
     }
   }
