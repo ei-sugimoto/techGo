@@ -3,13 +3,13 @@ package usecase
 import (
 	"context"
 
-	"github.com/ei-sugimoto/techGO/internal/domain/model"
 	"github.com/ei-sugimoto/techGO/internal/domain/service"
 	input "github.com/ei-sugimoto/techGO/internal/usecase/Input"
+	"github.com/ei-sugimoto/techGO/internal/usecase/output"
 )
 
 type IUserCharacterUseCase interface {
-	GetUserCharacter(ctx context.Context, i *input.GetUserCharacterInput) (context.Context, []*model.UserCharacter, error)
+	GetUserCharacter(ctx context.Context, i *input.GetUserCharacterInput) (context.Context, *output.GetUserCharacterOutputs, error)
 }
 
 type UserCharacterUseCase struct {
@@ -22,11 +22,19 @@ func NewUserCharacterUseCase(userCharacterSerivce *service.UserCharacterService)
 	}
 }
 
-func (u *UserCharacterUseCase) GetUserCharacter(ctx context.Context, i *input.GetUserCharacterInput) (context.Context, []*model.UserCharacter, error) {
+func (u *UserCharacterUseCase) GetUserCharacter(ctx context.Context, i *input.GetUserCharacterInput) (context.Context, 
+	*output.GetUserCharacterOutputs, error) {
 	newctx, rows, err := u.userCharacterSerivce.GetUserCharacter(ctx, i.UserID)
 
 	if err != nil {
 		return newctx, nil, err
 	}
-	return newctx, rows, nil
+	res := output.GetUserCharacterOutputs{}
+	for _, row := range rows {
+		res = append(res, output.GetUserCharacterOutput{
+			UserCharacterID: row.UserCharacterID.String(),
+			UserID:          row.User.UserID.String(),
+		})
+	}
+	return newctx, &res, nil
 }

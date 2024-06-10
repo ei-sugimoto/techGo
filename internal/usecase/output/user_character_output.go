@@ -1,8 +1,8 @@
 package output
 
-type getUserCharacterOutput struct {
+type GetUserCharacterOutput struct {
 	UserCharacterID string
 	UserID          string
 }
 
-type GetUserCharacterOutputs []getUserCharacterOutput
+type GetUserCharacterOutputs []GetUserCharacterOutput
