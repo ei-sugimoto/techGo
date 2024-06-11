@@ -5,10 +5,11 @@ import (
 )
 
 type UserCharacter struct {
-	UserCharacterID uuid.UUID `gorm:"type:uuid;primary_key;"`
-	Character       Character `gorm:"foreignkey:CharacterID;association_foreignkey:CharacterID;association_autoupdate:false;association_autocreate:false;"`
-	User            User      `gorm:"foreignkey:UserID;association_foreignkey:UserID;association_autoupdate:false;association_autocreate:false;"`
-	Name            string    `gorm:"type:varchar(255);not null;"`
+	UserCharacterID uuid.UUID `gorm:"type:uuid;primary_key;column:user_character_id"`
+	CharacterID     uuid.UUID `gorm:"type:uuid;not null"`
+	UserID          uuid.UUID `gorm:"type:uuid;not null"`
+	User            User      `gorm:"foreignKey:UserID;association_foreignkey:UserID"`
+	Character       Character `gorm:"foreignKey:CharacterID;association_foreignkey:CharacterID"`
 }
 
 func (uc *UserCharacter) TableName() string {

@@ -47,7 +47,7 @@ func NewRouter() *gin.Engine {
 	r.PUT("/user/update", middleware.Recovery(), middleware.NewUserAgent(), func(c *gin.Context) {
 		userHandlerUpdate(userHandler, c)
 	})
-	r.GET("/user_character/list", middleware.Recovery(), middleware.NewUserAgent(), func(c *gin.Context) {
+	r.GET("/character/list", middleware.Recovery(), middleware.NewUserAgent(), func(c *gin.Context) {
 		userCharacterHandlerGet(userCharacterHandler, c)
 	})
 

@@ -33,7 +33,7 @@ func (u *UserCharacterUseCase) GetUserCharacter(ctx context.Context, i *input.Ge
 	for _, row := range rows {
 		res = append(res, output.GetUserCharacterOutput{
 			UserCharacterID: row.UserCharacterID.String(),
-			Name:            row.Name,
+			Name:            row.Character.Name,
 			CharacterID:     row.Character.CharacterID.String(),
 		})
 	}

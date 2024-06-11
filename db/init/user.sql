@@ -15,7 +15,6 @@ CREATE TABLE IF NOT EXISTS `character` (
 
 CREATE TABLE IF NOT EXISTS `user_character` (
     `user_character_id` CHAR(36) NOT NULL PRIMARY KEY UNIQUE,
-    `name` VARCHAR(255) NOT NULL,
     `user_id` CHAR(36),
     `character_id` CHAR(36),
     FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`),
@@ -25,5 +24,5 @@ CREATE TABLE IF NOT EXISTS `user_character` (
 INSERT INTO `user` (`user_id`, `name`) VALUES (UUID(), 'Test');
 INSERT INTO `character` (`character_id`, `name`) VALUES (UUID(), 'Test');
 INSERT INTO `character` (`character_id`, `name`) VALUES (UUID(), 'Test2');
-INSERT INTO `user_character` (`user_character_id`, `name`, `user_id`, `character_id`) VALUES (UUID(), 'Test', (SELECT `user_id` FROM `user` WHERE `name` = 'Test'), (SELECT `character_id` FROM `character` WHERE `name` = 'Test'));
-INSERT INTO `user_character` (`user_character_id`, `name`, `user_id`, `character_id`) VALUES (UUID(), 'Test2', (SELECT `user_id` FROM `user` WHERE `name` = 'Test'), (SELECT `character_id` FROM `character` WHERE `name` = 'Test2'));
+INSERT INTO `user_character` (`user_character_id`,  `user_id`, `character_id`) VALUES (UUID(),  (SELECT `user_id` FROM `user` WHERE `name` = 'Test'), (SELECT `character_id` FROM `character` WHERE `name` = 'Test'));
+INSERT INTO `user_character` (`user_character_id`,  `user_id`, `character_id`) VALUES (UUID(),  (SELECT `user_id` FROM `user` WHERE `name` = 'Test'), (SELECT `character_id` FROM `character` WHERE `name` = 'Test2'));
