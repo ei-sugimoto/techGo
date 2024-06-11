@@ -31,6 +31,13 @@ func NewRouter() *gin.Engine {
 	userUseCase := usecase.NewUserUsecase(userService)
 	userPresenter := presenter.NewUserPresenter()
 	userHandler := handler.NewUserHandler(userUseCase, *userPresenter)
+
+	userCharacterRepository := repository.NewUserCharacterRepository(&db)
+	userCharacterService := service.NewUserCharacterService(userCharacterRepository)
+	userCharacterUseCase := usecase.NewUserCharacterUseCase(userCharacterService)
+	userCharacterPresenter := presenter.NewUserCharacterPresenter()
+	userCharacterHandler := handler.NewUserCharacterHandler(userCharacterUseCase, *userCharacterPresenter)
+
 	r.POST("/user/create", middleware.Recovery(), middleware.NewUserAgent(), func(c *gin.Context) {
 		userHandlerCreate(userHandler, c)
 	})
@@ -39,6 +46,9 @@ func NewRouter() *gin.Engine {
 	})
 	r.PUT("/user/update", middleware.Recovery(), middleware.NewUserAgent(), func(c *gin.Context) {
 		userHandlerUpdate(userHandler, c)
+	})
+	r.GET("/user_character/list", middleware.Recovery(), middleware.NewUserAgent(), func(c *gin.Context) {
+		userCharacterHandlerGet(userCharacterHandler, c)
 	})
 
 	return r
@@ -82,4 +92,14 @@ func userHandlerUpdate(userHandler handler.IUserHandler, c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, nil)
+}
+
+func userCharacterHandlerGet(userCharacterHandler handler.IUserCharacterHandler, c *gin.Context) {
+	res, err := userCharacterHandler.GetUserCharacter(c)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, res)
 }
