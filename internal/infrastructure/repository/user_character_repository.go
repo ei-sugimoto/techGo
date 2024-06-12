@@ -38,16 +38,11 @@ func NewUserCharacterRepository(db *dao.DataBase) repository.IUserCharacterRepos
 func (r *UserCharacterRepository) GetUserChraracter(ctx context.Context, userId string) ([]*model.UserCharacter, error) {
 	var userCharacters []*model.UserCharacter
 
-	if err := r.DB.GormDB.Where("user_character.user_id = ?", userId).
-		Joins("User").
-		Joins("Character").
-		Preload("User").
+	if err := r.DB.GormDB.Where("user_character.user_id = '2d9e68f6-875c-4138-93d1-819378e32ab3'").Model(&model.UserCharacter{}).
 		Preload("Character").
 		Find(&userCharacters).Error; err != nil {
 		r.logger.Error(fmt.Sprintf("failed to get user characters: %v", err))
 		return nil, err
 	}
-
-	fmt.Println(userCharacters[0])
 	return userCharacters, nil
 }

@@ -1,15 +1,11 @@
 package model
 
-import (
-	"github.com/google/uuid"
-)
-
 type UserCharacter struct {
-	UserCharacterID uuid.UUID `gorm:"type:uuid;primary_key;column:user_character_id"`
-	CharacterID     uuid.UUID `gorm:"type:uuid;not null"`
-	UserID          uuid.UUID `gorm:"type:uuid;not null"`
-	User            User      `gorm:"foreignKey:UserID;association_foreignkey:UserID"`
-	Character       Character `gorm:"foreignKey:CharacterID;association_foreignkey:CharacterID"`
+	UserCharacterID string `gorm:"type:char(36);primary_key;not null;"`
+	CharacterID     string
+	UserID          string
+	User            User      `gorm:"references:UserID"`
+	Character       Character `gorm:"references:CharacterID"`
 }
 
 func (uc *UserCharacter) TableName() string {

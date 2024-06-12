@@ -10,8 +10,6 @@ services:
       MYSQL_PASSWORD: mypassword
     volumes:
       - db-data:/var/lib/mysql
-      - ./db/my.cnf:/etc/mysql/my.cnf
-      - ./db/init:/docker-entrypoint-initdb.d
     ports:
       - "3306:3306"
 

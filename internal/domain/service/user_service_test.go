@@ -19,7 +19,7 @@ func TestGetUser(t *testing.T) {
 
 	mockRepo := mock_repository.NewMockIUserRepository(ctrl)
 	mockUUID := uuid.New()
-	mockUser := &model.User{UserID: mockUUID, Name: "testName"}
+	mockUser := &model.User{UserID: mockUUID.String(), Name: "testName"}
 	mockRepo.EXPECT().GetUser(gomock.Any(), "testID").Return(mockUser, nil)
 
 	userService := service.NewUserService(mockRepo)

@@ -34,7 +34,7 @@ func (u *userUseCase) GetUser(ctx context.Context, i *input.GetUserInput) (conte
 		return ctx, nil, err
 	}
 	return ctx, &output.GetUserOutput{
-		UserID: user.UserID.String(),
+		UserID: user.UserID,
 		Name:   user.Name,
 	}, nil
 }

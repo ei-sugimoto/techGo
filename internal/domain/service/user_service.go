@@ -23,7 +23,7 @@ func (s *UserService) CreateUser(ctx context.Context, name string) (context.Cont
 
 	uuid := uuid.New()
 	user := &model.User{
-		UserID: uuid,
+		UserID: uuid.String(),
 		Name:   name,
 	}
 	err := s.userRepository.CreateUser(ctx, user)
