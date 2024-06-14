@@ -18,9 +18,7 @@ func NewDataBase(db *gorm.DB) *DataBase {
 }
 
 func (d *DataBase) ConnectDataBase() {
-	const (
-		dbDriver = "mysql"
-	)
+
 	host, port, user, password, dbName := config.Env()
 
 	dsn := user + ":" + password + "@tcp(" + host + ":" + port + ")/" + dbName + "?charset=utf8mb4&parseTime=True&loc=Local"
@@ -36,7 +34,6 @@ func (d *DataBase) ConnectDataBase() {
 	d.Seed()
 	logger.Info("Connected to database")
 
-	return
 }
 
 func (d *DataBase) Migrate() {
@@ -69,10 +66,12 @@ func (d *DataBase) Seed() {
 		{
 			CharacterID: characterId1,
 			Name:        "Warrior",
+			Probability: 60,
 		},
 		{
 			CharacterID: characterId2,
 			Name:        "Magician",
+			Probability: 40,
 		},
 	}
 	d.GormDB.Create(&characters)
