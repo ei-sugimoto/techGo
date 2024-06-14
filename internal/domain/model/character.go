@@ -24,7 +24,7 @@ func NewCharacter(characterID, name string, rarity int) (*Character, error) {
 }
 
 func isValidRarity(rarity int) error {
-	if rarity >= 1 && rarity <= 5 {
+	if rarity >= 1 && rarity <= 100 {
 		return nil
 	} else {
 		return errors.New("invalid rarity")

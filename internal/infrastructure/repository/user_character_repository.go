@@ -22,6 +22,10 @@ type UserCharacterRepository struct {
 	logger *slog.Logger
 }
 
+const (
+	MaxRarity = 100
+)
+
 func NewUserCharacterRepository(db *dao.DataBase) repository.IUserCharacterRepository {
 	logger := pkg.NewLogger()
 	newLogger := llog.New(
@@ -53,14 +57,15 @@ func (r *UserCharacterRepository) CreateUserCharacter(ctx context.Context, userI
 	var characters []*model.Character
 	for len(characters) < times {
 		var count int64
-		if err := r.DB.GormDB.Model(&model.Character{}).Count(&count).Error; err != nil {
+		Rarity := rand.Intn(MaxRarity) + 1
+		if err := r.DB.GormDB.Model(&model.Character{}).Count(&count).Where("Rarity < ?", Rarity).Error; err != nil {
 			r.logger.Info(fmt.Sprintf("failed to count characters: %v", err))
 			return nil, err
 		}
 
 		offset := rand.Intn(int(count))
 		character := &model.Character{}
-		if err := r.DB.GormDB.Offset(offset).Limit(1).Find(character).Error; err != nil {
+		if err := r.DB.GormDB.Offset(offset).Limit(1).Find(character).Where("Rarity < ?", Rarity).Error; err != nil {
 			r.logger.Info(fmt.Sprintf("failed to get character: %v", err))
 			return nil, err
 		}
