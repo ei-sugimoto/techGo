@@ -51,9 +51,8 @@ func (u *UserCharacterUseCase) CreateUserCharacter(ctx context.Context, i *input
 	res := output.CreateUserCharacterOutputs{}
 	for _, row := range rows {
 		res = append(res, output.CreateUserCharacterOutput{
-			UserCharacterID: row.UserCharacterID,
-			Name:            row.Character.Name,
-			CharacterID:     row.Character.CharacterID,
+			Name:        row.Name,
+			CharacterID: row.CharacterID,
 		})
 	}
 	return newctx, res, nil

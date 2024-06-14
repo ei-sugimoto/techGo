@@ -8,5 +8,5 @@ import (
 
 type IUserCharacterRepository interface {
 	GetUserChraracter(ctx context.Context, userId string) ([]*model.UserCharacter, error)
-	CreateUserCharacter(ctx context.Context, userId string, times int) ([]*model.UserCharacter, error)
+	CreateUserCharacter(ctx context.Context, userId string, times int) ([]*model.Character, error)
 }

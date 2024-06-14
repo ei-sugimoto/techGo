@@ -30,6 +30,7 @@ func (d *DataBase) ConnectDataBase() {
 		logger.Error("Failed to connect to database")
 		panic(err)
 	}
+	d.Drop()
 	d.Migrate()
 	d.Seed()
 	logger.Info("Connected to database")

@@ -80,9 +80,8 @@ func (p *UserCharacterPresenter) CreateUserCharacterResponse(ctx context.Context
 	res := UserCharacterCreateResponses{}
 	for _, row := range *rows {
 		res.UserCharacters = append(res.UserCharacters, UserCharacter{
-			UserCharacterID: row.UserCharacterID,
-			CharacterID:     row.CharacterID,
-			Name:            row.Name,
+			CharacterID: row.CharacterID,
+			Name:        row.Name,
 		})
 	}
 	return &res

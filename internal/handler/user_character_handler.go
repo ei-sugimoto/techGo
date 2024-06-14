@@ -59,9 +59,8 @@ func (h *userCharacterHandler) CreateUserChaaracter(ctx *gin.Context) (*presente
 	var rows []presenter.UserCharacter
 	for _, row := range output {
 		rows = append(rows, presenter.UserCharacter{
-			UserCharacterID: row.UserCharacterID,
-			CharacterID:     row.CharacterID,
-			Name:            row.Name,
+			CharacterID: row.CharacterID,
+			Name:        row.Name,
 		})
 	}
 	return h.userCharacterPresenter.CreateUserCharacterResponse(newCtx, &rows), nil

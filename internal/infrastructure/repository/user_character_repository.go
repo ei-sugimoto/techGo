@@ -12,6 +12,7 @@ import (
 	"github.com/ei-sugimoto/techGO/internal/domain/repository"
 	"github.com/ei-sugimoto/techGO/internal/infrastructure/dao"
 	"github.com/ei-sugimoto/techGO/pkg"
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 	llog "gorm.io/gorm/logger"
 )
@@ -48,9 +49,9 @@ func (r *UserCharacterRepository) GetUserChraracter(ctx context.Context, userId 
 	return userCharacters, nil
 }
 
-func (r *UserCharacterRepository) CreateUserCharacter(ctx context.Context, userId string, times int) ([]*model.UserCharacter, error) {
+func (r *UserCharacterRepository) CreateUserCharacter(ctx context.Context, userId string, times int) ([]*model.Character, error) {
 	var characters []*model.Character
-	for len(characters) == times {
+	for len(characters) < times {
 		character := &model.Character{}
 		if err := r.DB.GormDB.Model(&model.Character{}).Order(gorm.Expr("rand()")).First(character).Error; err != nil {
 			r.logger.Error(fmt.Sprintf("failed to get character: %v", err))
@@ -58,19 +59,18 @@ func (r *UserCharacterRepository) CreateUserCharacter(ctx context.Context, userI
 		}
 		characters = append(characters, character)
 	}
-
-	var userCharacters []*model.UserCharacter
+	r.logger.Info(fmt.Sprintf("characters: %v", characters))
 	for _, character := range characters {
 		userCharacter := &model.UserCharacter{
-			UserID:      userId,
-			CharacterID: character.CharacterID,
+			UserID:          userId,
+			CharacterID:     character.CharacterID,
+			UserCharacterID: uuid.New().String(),
 		}
 		if err := r.DB.GormDB.Create(userCharacter).Error; err != nil {
 			r.logger.Error(fmt.Sprintf("failed to create user character: %v", err))
 			return nil, err
 		}
-		userCharacters = append(userCharacters, userCharacter)
 
 	}
-	return userCharacters, nil
+	return characters, nil
 }
