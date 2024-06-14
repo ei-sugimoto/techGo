@@ -39,3 +39,21 @@ func (u *UserCharacterUseCase) GetUserCharacter(ctx context.Context, i *input.Ge
 	}
 	return newctx, res, nil
 }
+
+func (u *UserCharacterUseCase) CreateUserCharacter(ctx context.Context, i *input.CreateUserCharacterInput) (context.Context,
+	output.CreateUserCharacterOutputs, error) {
+	newctx, rows, err := u.userCharacterSerivce.CreateUserCharacter(ctx, i.UserID, i.Times)
+
+	if err != nil {
+		return newctx, nil, err
+	}
+	res := output.CreateUserCharacterOutputs{}
+	for _, row := range rows {
+		res = append(res, output.CreateUserCharacterOutput{
+			UserCharacterID: row.UserCharacterID,
+			Name:            row.Character.Name,
+			CharacterID:     row.Character.CharacterID,
+		})
+	}
+	return newctx, res, nil
+}
