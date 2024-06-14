@@ -5,7 +5,7 @@ import "errors"
 type Character struct {
 	CharacterID string `gorm:"type:char(36);primary_key;unique;not null;"`
 	Name        string `gorm:"type:varchar(255);not null;"`
-	rarity      int    `gorm:"type:int;not null;"`
+	Rarity      int    `gorm:"type:int;not null;"`
 }
 
 func (c *Character) TableName() string {
@@ -19,7 +19,7 @@ func NewCharacter(characterID, name string, rarity int) (*Character, error) {
 	return &Character{
 		CharacterID: characterID,
 		Name:        name,
-		rarity:      rarity,
+		Rarity:      rarity,
 	}, nil
 }
 
