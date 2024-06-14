@@ -22,9 +22,8 @@ type UserCharacterGetResponses struct {
 }
 
 type UserCharacter struct {
-	UserCharacterID string `json:"user_character_id"`
-	CharacterID     string `json:"character_id"`
-	Name            string `json:"name"`
+	CharacterID string `json:"character_id"`
+	Name        string `json:"name"`
 }
 
 type UserCharacterCreateRequest struct {
@@ -52,9 +51,8 @@ func (p *UserCharacterPresenter) GetUserCharacterResponse(ctx context.Context, r
 	res := UserCharacterGetResponses{}
 	for _, row := range *rows {
 		res.UserCharacters = append(res.UserCharacters, UserCharacter{
-			UserCharacterID: row.UserCharacterID,
-			CharacterID:     row.CharacterID,
-			Name:            row.Name,
+			CharacterID: row.CharacterID,
+			Name:        row.Name,
 		})
 	}
 	return &res

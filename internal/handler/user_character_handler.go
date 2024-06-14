@@ -34,9 +34,8 @@ func (h *userCharacterHandler) GetUserCharacter(ctx *gin.Context) (*presenter.Us
 	var rows []presenter.UserCharacter
 	for _, row := range output {
 		rows = append(rows, presenter.UserCharacter{
-			UserCharacterID: row.UserCharacterID,
-			CharacterID:     row.CharacterID,
-			Name:            row.Name,
+			CharacterID: row.CharacterID,
+			Name:        row.Name,
 		})
 	}
 
