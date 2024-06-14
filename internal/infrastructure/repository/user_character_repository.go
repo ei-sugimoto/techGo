@@ -72,7 +72,6 @@ func (r *UserCharacterRepository) CreateUserCharacter(ctx context.Context, userI
 
 		characters = append(characters, character)
 	}
-	r.logger.Info(fmt.Sprintf("characters: %v", characters))
 	for _, character := range characters {
 		userCharacter := &model.UserCharacter{
 			UserID:          userId,
