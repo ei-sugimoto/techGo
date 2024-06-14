@@ -72,6 +72,14 @@ func (d *DataBase) Seed() {
 			CharacterID: characterId2,
 			Name:        "Magician",
 		},
+		{
+			CharacterID: uuid.New().String(),
+			Name:        "Archer",
+		},
+		{
+			CharacterID: uuid.New().String(),
+			Name:        "Priest",
+		},
 	}
 	d.GormDB.Create(&characters)
 	userCharacterId1 := uuid.New().String()
