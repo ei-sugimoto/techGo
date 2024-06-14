@@ -50,6 +50,9 @@ func NewRouter() *gin.Engine {
 	r.GET("/character/list", middleware.Recovery(), middleware.NewUserAgent(), func(c *gin.Context) {
 		userCharacterHandlerGet(userCharacterHandler, c)
 	})
+	r.POST("/gacha/draw", middleware.Recovery(), middleware.NewUserAgent(), func(c *gin.Context) {
+		userCharacterHandlerCreate(userCharacterHandler, c)
+	})
 
 	return r
 }
@@ -96,6 +99,16 @@ func userHandlerUpdate(userHandler handler.IUserHandler, c *gin.Context) {
 
 func userCharacterHandlerGet(userCharacterHandler handler.IUserCharacterHandler, c *gin.Context) {
 	res, err := userCharacterHandler.GetUserCharacter(c)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, res)
+}
+
+func userCharacterHandlerCreate(userCharacterHandler handler.IUserCharacterHandler, c *gin.Context) {
+	res, err := userCharacterHandler.CreateUserChaaracter(c)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
