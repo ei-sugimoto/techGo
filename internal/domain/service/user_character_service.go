@@ -26,3 +26,12 @@ func (s *UserCharacterService) GetUserCharacter(ctx context.Context, userId stri
 	}
 	return ctx, userCharacter, nil
 }
+
+func (s *UserCharacterService) CreateUserCharacter(ctx context.Context, userId string, times int) (context.Context, []*model.UserCharacter, error) {
+	userCharacter, err := s.userCharacterRepository.CreateUserCharacter(ctx, userId, times)
+	if err != nil {
+		s.logger.Error(err.Error())
+		return ctx, nil, err
+	}
+	return ctx, userCharacter, nil
+}
