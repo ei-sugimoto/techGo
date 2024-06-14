@@ -66,12 +66,10 @@ func (d *DataBase) Seed() {
 		{
 			CharacterID: characterId1,
 			Name:        "Warrior",
-			Probability: 60,
 		},
 		{
 			CharacterID: characterId2,
 			Name:        "Magician",
-			Probability: 40,
 		},
 	}
 	d.GormDB.Create(&characters)
