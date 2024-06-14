@@ -27,6 +27,15 @@ type UserCharacter struct {
 	Name            string `json:"name"`
 }
 
+type UserCharacterCreateRequest struct {
+	UserID string `json:"user_id"`
+	Times  int    `json:"times"`
+}
+
+type UserCharacterCreateResponses struct {
+	UserCharacters []UserCharacter `json:"user_characters"`
+}
+
 func (p *UserCharacterPresenter) GetUserCharacterRequest(ctx *gin.Context) (*UserCharacterGetRequest, error) {
 	var req UserCharacterGetRequest
 	token := ctx.GetHeader("x-token")
@@ -49,4 +58,20 @@ func (p *UserCharacterPresenter) GetUserCharacterResponse(ctx context.Context, r
 		})
 	}
 	return &res
+}
+
+func (p *UserCharacterPresenter) CreateUserCharacterRequest(ctx *gin.Context) (*UserCharacterCreateRequest, error) {
+	var req UserCharacterCreateRequest
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		return nil, err
+	}
+
+	token := ctx.GetHeader("x-token")
+	userId, err := pkg.DecodeJwt(token, "user_id")
+	if err != nil {
+		return nil, err
+	}
+	req.UserID = userId
+
+	return &req, nil
 }
