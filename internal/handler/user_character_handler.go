@@ -9,6 +9,7 @@ import (
 
 type IUserCharacterHandler interface {
 	GetUserCharacter(c *gin.Context) (*presenter.UserCharacterGetResponses, error)
+	CreateUserChaaracter(ctx *gin.Context) (*presenter.UserCharacterCreateResponses, error)
 }
 
 type userCharacterHandler struct {
@@ -40,4 +41,28 @@ func (h *userCharacterHandler) GetUserCharacter(ctx *gin.Context) (*presenter.Us
 	}
 
 	return h.userCharacterPresenter.GetUserCharacterResponse(newCtx, &rows), nil
+}
+
+func (h *userCharacterHandler) CreateUserChaaracter(ctx *gin.Context) (*presenter.UserCharacterCreateResponses, error) {
+	req, err := h.userCharacterPresenter.CreateUserCharacterRequest(ctx)
+	if err != nil || req == nil {
+		return nil, err
+	}
+	input := input.CreateUserCharacterInput{
+		UserID: req.UserID,
+		Times:  req.Times,
+	}
+	newCtx, output, err := h.userCharacterUseCase.CreateUserCharacter(ctx.Request.Context(), &input)
+	if err != nil {
+		return nil, err
+	}
+	var rows []presenter.UserCharacter
+	for _, row := range output {
+		rows = append(rows, presenter.UserCharacter{
+			UserCharacterID: row.UserCharacterID,
+			CharacterID:     row.CharacterID,
+			Name:            row.Name,
+		})
+	}
+	return h.userCharacterPresenter.CreateUserCharacterResponse(newCtx, &rows), nil
 }

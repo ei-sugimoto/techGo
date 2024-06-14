@@ -10,6 +10,7 @@ import (
 
 type IUserCharacterUseCase interface {
 	GetUserCharacter(ctx context.Context, i *input.GetUserCharacterInput) (context.Context, output.GetUserCharacterOutputs, error)
+	CreateUserCharacter(ctx context.Context, i *input.CreateUserCharacterInput) (context.Context, output.CreateUserCharacterOutputs, error)
 }
 
 type UserCharacterUseCase struct {

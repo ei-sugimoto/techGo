@@ -75,3 +75,15 @@ func (p *UserCharacterPresenter) CreateUserCharacterRequest(ctx *gin.Context) (*
 
 	return &req, nil
 }
+
+func (p *UserCharacterPresenter) CreateUserCharacterResponse(ctx context.Context, rows *[]UserCharacter) *UserCharacterCreateResponses {
+	res := UserCharacterCreateResponses{}
+	for _, row := range *rows {
+		res.UserCharacters = append(res.UserCharacters, UserCharacter{
+			UserCharacterID: row.UserCharacterID,
+			CharacterID:     row.CharacterID,
+			Name:            row.Name,
+		})
+	}
+	return &res
+}
