@@ -51,7 +51,7 @@ func (d *DataBase) Drop() {
 
 func (d *DataBase) Seed() {
 	var characters []*model.Character
-	for i := 1; i <= 5; i++ {
+	for i := 1; i <= 15; i++ {
 		character, err := model.NewCharacter(uuid.New().String(), fmt.Sprintf("Character%d", i), i)
 		if err != nil {
 			panic(err)
