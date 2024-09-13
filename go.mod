@@ -14,7 +14,7 @@ require (
 	github.com/gin-contrib/cors v1.7.2
 	github.com/gin-gonic/gin v1.10.0
 	github.com/golang/mock v1.6.0
-	github.com/mileusna/useragent v1.3.4
+	github.com/mileusna/useragent v1.3.5
 )
 
 require (
