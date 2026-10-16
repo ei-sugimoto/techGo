@@ -61,7 +61,7 @@ require (
 )
 
 require (
-	filippo.io/edwards25519 v1.1.0 // indirect
+	filippo.io/edwards25519 v1.1.1 // indirect
 	github.com/m-mizutani/clog v0.0.4
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
